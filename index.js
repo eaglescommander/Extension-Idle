@@ -7,7 +7,7 @@ import { promptQuietForLoudResponse, sendMessageAs, sendNarratorMessage } from '
 import { extension_settings, getContext, renderExtensionTemplateAsync } from '../../../extensions.js';
 import { registerSlashCommand } from '../../../slash-commands.js';
 
-const extensionName = 'third-party/Extension-Idle';
+const extensionName = 'third-party/Extension-Idle-Prompt';
 
 let idleTimer = null;
 let repeatCount = 0;
@@ -122,6 +122,19 @@ async function sendIdlePrompt() {
     resetIdleTimer();
 }
 
+async function sendIdolPromptManually() {
+    if (repeatCount >= extension_settings.idle.repeats || $('#mes_stop').is(':visible')) {
+        resetIdleTimer();
+        return;
+    }
+
+    const randomPrompt = extension_settings.idle.prompts[
+        Math.floor(Math.random() * extension_settings.idle.prompts.length)
+    ];
+
+    sendPrompt(randomPrompt);
+    repeatCount++;
+}
 
 /**
  * Add our prompt to the chat and then send the chat to the backend.
@@ -377,5 +390,5 @@ jQuery(async () => {
         $('#idle_timer_min').parent().show();
     }
     registerSlashCommand('idle', toggleIdle, [], '– toggles idle mode', true, true);
-    registerSlashCommand('sip', sendIdlePrompt, [], '– sends an idle prompt', true, true);
+    registerSlashCommand('sip', sendIdolPromptManually, [], '– sends an idle prompt manually', true, true);
 });
