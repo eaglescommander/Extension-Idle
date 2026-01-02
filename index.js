@@ -377,4 +377,5 @@ jQuery(async () => {
         $('#idle_timer_min').parent().show();
     }
     registerSlashCommand('idle', toggleIdle, [], '– toggles idle mode', true, true);
+    registerSlashCommand('send-idle-prompt', sendIdlePrompt, [], '– sends an idle prompt', true, true);
 });
